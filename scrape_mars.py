@@ -5,7 +5,7 @@
 # 
 # ![mission_to_mars](Images/mission_to_mars.png)
 
-# In[1]:
+# In[23]:
 
 
 from bs4 import BeautifulSoup
@@ -15,17 +15,13 @@ import pandas as pd
 import requests, pymongo, time, os
 
 
-# In[2]:
+# In[24]:
 
 
-def scrape():
-    #Setup configuration variables to enable Splinter to interact with browser 
-    executable_path = {'executable_path': ChromeDriverManager().install()}
-    browser = Browser('chrome', **executable_path, headless=True)
-    data=scrape_all(browser)
-    # after browser quit return data to line 25
-    browser.quit()
-    return data
+
+#Setup configuration variables to enable Splinter to interact with browser 
+executable_path = {'executable_path': ChromeDriverManager().install()}
+browser = Browser('chrome', **executable_path, headless=True)
 
 
 # ## Step 1 - Scraping
@@ -39,7 +35,7 @@ def scrape():
 # 
 # 
 
-# In[3]:
+# In[25]:
 
 
 def scrape_news(bro):
@@ -81,11 +77,11 @@ def scrape_news(bro):
         'news_p':news_p    
 
     }
-    #print(scraped_data)
+    print(scraped_data)
     return scraped_data
 
 
-#scrape_news(browser)
+scrape_news(browser)
 
 
 # 
@@ -105,7 +101,7 @@ def scrape_news(bro):
 # featured_image_url = 'https://spaceimages-mars.com/image/featured/mars2.jpg'
 # 
 
-# In[4]:
+# In[27]:
 
 
 def scrape_feature(brow):
@@ -115,7 +111,7 @@ def scrape_feature(brow):
     # Use the browser to visit the url
     brow.visit(url_jpl) 
 
-    full_image_elem = brow.find_by_tag('button')[1]
+    full_image_elem = browser.find_by_tag('button')[1]
     full_image_elem.click()
 
     html_jpl = brow.html
@@ -127,11 +123,11 @@ def scrape_feature(brow):
     # The url for JPL Featured Space Image - at end
 
     # Full url
-    feature_image_url = f"{url_jpl}/{space_images}"
-    #print(feature_image_url)
+    feature_image_url = f"{url_jpl}{space_images}"
+    print(feature_image_url)
     return feature_image_url
 
-#scrape_feature(browser)
+scrape_feature(browser)
 
 
 # ### Mars Facts
@@ -143,7 +139,7 @@ def scrape_feature(brow):
 # 
 # 
 
-# In[5]:
+# In[28]:
 
 
 def scrape_mars_facts(brows):
@@ -161,13 +157,13 @@ def scrape_mars_facts(brows):
     mars_df.columns=['Mars - Earth Comparison','Mars','Earth']
     
     mars_df.set_index('Mars - Earth Comparison',inplace=True)
-    #print (mars_df)
+    print (mars_df)
     #mars_df
     
     
     return mars_df
 
-#scrape_mars_facts(browser)
+scrape_mars_facts(browser)
 
 #    mars_df.to_html()
 
@@ -190,7 +186,7 @@ def scrape_mars_facts(brows):
 # hemisphere.
 # 
 
-# In[6]:
+# In[29]:
 
 
 def scrape_hemis(brows):
@@ -213,17 +209,16 @@ def scrape_hemis(brows):
         hemis['title']=brows.find_by_css('h2.title').text
 
         list_hemispheres.append(hemis)
-        # the browser to go back to the last page that it was on.
         brows.back() 
         
-    # mars_hemis_url = f"{url_mars_hemispheres}{hemis}"   
-
+       # mars_hemis_url = f"{url_mars_hemispheres}{hemis}"   
+  
     return list_hemispheres
 
-#scrape_hemis(browser)
+scrape_hemis(browser)
 
 
-# In[7]:
+# In[30]:
 
 
 
@@ -234,13 +229,49 @@ def scrape_all(browser):
         "news_p" : this['news_p'],
         "feature_image_url" : scrape_feature(browser),
         "hemispheres" : scrape_hemis(browser),
-        # convert a datafarme to HTML table
-        "table_html" : scrape_mars_facts(browser).to_html()
+        "table_html" : scrape_mars_facts(browser)
             }
-#    print(this_dict)
+    print(this_dict)
     return this_dict
 
-#scrape_all(browser)
+scrape_all(browser)
+
+
+
+# In[20]:
+
+
+
+def scrape_all(browser):
+    this=scrape_news(browser)
+    this_dict = {
+        "news_title" : this['news_title'],
+        "news_p" : this['news_p'],
+        "feature_image_url" : scrape_feature(browser),
+        "hemispheres" : scrape_hemis(browser),
+        "table_html" : scrape_mars_facts(browser)
+            }
+    print(this_dict)
+    return this_dict
+
+ scrape_all(browser)
+
+
+# In[31]:
+
+
+#calling the function -- pass browser to the function
+print(scrape_all(browser))
+
+
+# In[32]:
+
+
+# When you’ve finished testing, close your browser using browser.quit:
+browser.quit()
+
+
+# In[ ]:
 
 
 

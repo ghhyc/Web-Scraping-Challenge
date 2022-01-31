@@ -18,14 +18,10 @@ import requests, pymongo, time, os
 # In[2]:
 
 
-def scrape():
-    #Setup configuration variables to enable Splinter to interact with browser 
-    executable_path = {'executable_path': ChromeDriverManager().install()}
-    browser = Browser('chrome', **executable_path, headless=True)
-    data=scrape_all(browser)
-    # after browser quit return data to line 25
-    browser.quit()
-    return data
+
+#Setup configuration variables to enable Splinter to interact with browser 
+executable_path = {'executable_path': ChromeDriverManager().install()}
+browser = Browser('chrome', **executable_path, headless=False)
 
 
 # ## Step 1 - Scraping
@@ -71,7 +67,7 @@ def scrape_news(bro):
 
     # Search for the div where the paragraph news is located
     results = soup.find_all('div', class_="article_teaser_body")
-    news_p = results[0].text
+    new_p = results[0].text
     #print(f"Paragraph: {new_p}")
 
     # Step 1 - Scraping
@@ -81,11 +77,21 @@ def scrape_news(bro):
         'news_p':news_p    
 
     }
-    #print(scraped_data)
     return scraped_data
 
 
-#scrape_news(browser)
+# In[9]:
+
+
+def scrape_all(browser):
+    this=scrape_news(browser)
+    this_dict = {
+        "news_title" : this['news_title'],
+        "news_p" : this['news_p'],
+        "feature_image_url" : scrape_feature(browser),
+        "hemispheres" : scrape_hemis(browser)
+            }
+    return this_dict
 
 
 # 
@@ -105,7 +111,7 @@ def scrape_news(bro):
 # featured_image_url = 'https://spaceimages-mars.com/image/featured/mars2.jpg'
 # 
 
-# In[4]:
+# In[6]:
 
 
 def scrape_feature(brow):
@@ -115,7 +121,7 @@ def scrape_feature(brow):
     # Use the browser to visit the url
     brow.visit(url_jpl) 
 
-    full_image_elem = brow.find_by_tag('button')[1]
+    full_image_elem = browser.find_by_tag('button')[1]
     full_image_elem.click()
 
     html_jpl = brow.html
@@ -127,11 +133,9 @@ def scrape_feature(brow):
     # The url for JPL Featured Space Image - at end
 
     # Full url
-    feature_image_url = f"{url_jpl}/{space_images}"
-    #print(feature_image_url)
-    return feature_image_url
+    feature_image_url = f"{url_jpl}{space_images}"
 
-#scrape_feature(browser)
+    return feature_image_url
 
 
 # ### Mars Facts
@@ -143,33 +147,36 @@ def scrape_feature(brow):
 # 
 # 
 
-# In[5]:
+# In[ ]:
 
 
-def scrape_mars_facts(brows):
-    # URL
-    url_mars_facts = "https://space-facts.com/mars/"
-
-    # Use Pandas to automatically scrape any tabular data from a page.
-    mars_facts = pd.read_html(url_mars_facts)
-    mars_df = mars_facts[1]
-    #(mars_df)
-    #How many tables are available
-    #len(mars_facts)
+# URL
+url_mars_facts = "https://space-facts.com/mars/"
 
 
-    mars_df.columns=['Mars - Earth Comparison','Mars','Earth']
-    
-    mars_df.set_index('Mars - Earth Comparison',inplace=True)
-    #print (mars_df)
-    #mars_df
-    
-    
-    return mars_df
+# In[ ]:
 
-#scrape_mars_facts(browser)
+## f
+# Use Pandas to automatically scrape any tabular data from a page.
+mars_facts = pd.read_html(url_mars_facts)
+mars_df = mars_facts[1]
+(mars_df)
+#How many tables are available
+#len(mars_facts)
 
-#    mars_df.to_html()
+
+# In[ ]:
+
+
+mars_df.colums=['Mars - Earth Comparison','Mars','Earth']
+mars_df.set_index('Mars - Earth Comparison',inplace=True)
+mars_df
+
+
+# In[ ]:
+
+
+mars_df.to_html()
 
 
 # ### Mars Hemispheres
@@ -190,7 +197,7 @@ def scrape_mars_facts(brows):
 # hemisphere.
 # 
 
-# In[6]:
+# In[7]:
 
 
 def scrape_hemis(brows):
@@ -213,34 +220,28 @@ def scrape_hemis(brows):
         hemis['title']=brows.find_by_css('h2.title').text
 
         list_hemispheres.append(hemis)
-        # the browser to go back to the last page that it was on.
         brows.back() 
         
-    # mars_hemis_url = f"{url_mars_hemispheres}{hemis}"   
-
+       # mars_hemis_url = f"{url_mars_hemispheres}{hemis}"   
+  
     return list_hemispheres
 
-#scrape_hemis(browser)
+
+# In[ ]:
 
 
-# In[7]:
+# When you’ve finished testing, close your browser using browser.quit:
+browser.quit()
 
 
+# In[10]:
 
-def scrape_all(browser):
-    this=scrape_news(browser)
-    this_dict = {
-        "news_title" : this['news_title'],
-        "news_p" : this['news_p'],
-        "feature_image_url" : scrape_feature(browser),
-        "hemispheres" : scrape_hemis(browser),
-        # convert a datafarme to HTML table
-        "table_html" : scrape_mars_facts(browser).to_html()
-            }
-#    print(this_dict)
-    return this_dict
 
-#scrape_all(browser)
+#calling the function -- pass browser to the function
+print(scrape_all(browser))
+
+
+# In[ ]:
 
 
 
