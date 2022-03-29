@@ -1,33 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Red</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Red</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-</head>
-
-<body>
-  <div class="container">
-
-    <div class="jumbotron text-center">
-      <h1>Good morning </h1>
-      <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Dog!</a></p>
-    </div>
-
-    <!-- Phone Listings -->
-    <div class="row" id="phone-listings">
-      <div class="col-md-12">
-        <h4 class="heading">{{mars_index.news_title}}</h4>
-
-        <small>{{mars_index.news_p}}</small>
+  <body>
+    <div class="container">
+      <div class="jumbotron text-center">
+        <h1>Mission to Mars</h1>
+        <br />
+        <a class="btn btn-primary btn-lg" href="/scrape" role="button"
+          >Scrape New Data</a
+        >
       </div>
     </div>
-
-  </div>
-</body>
-
+    <!-- Main -->
+    <div class="container">
+      <div class="row">
+        <h3 id="headline">Latest Mars News</h3>
+        <div class="row">
+          <h6>{{ mars_index.news_title }}</h6>
+          <p>{{ mars_index.news_p}}</p>
+        </div>
+        <div class="col-lg-8 summary">
+          <h3>Featured Mars Image</h3>
+          <img
+            class="img-fluid"
+            src="{{ mars_index.feature_image_url }}"
+            style="width: 100%"
+          />
+        </div>
+        <div class="col-lg-4 visualization">
+          <div class="“container" col-lg-4 col-md-4 “>
+            <h5>Mars Facts</h5>
+            <div class="table-responsive">
+              <div class="table table-striped">
+                {{ mars_index.table_html|safe}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Main -->
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="col visualization">
+            <article>
+              <h3 id="hemisphere">Mars Hemispheres</h3>
+              <hr />
+              <!-- <div class="borderbox"> -->
+              <div class="container">
+                {% for data in mars_index.hemispheres %}
+                <div class="row">
+                  <div class="col">
+                    <img
+                      class="img-fluid"
+                      src="{{ data.url }}"
+                      style="width: 100%"
+                    />
+                    <br /><br />
+                    <p>{{data.title}}</p>
+                    <br />
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
-
