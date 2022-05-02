@@ -14,18 +14,26 @@ The initial scraping uses Jupyter Notebook, Beautiful Soup, Panda, and Requests/
 
 url=https://redplanetscience.com/ website was used to get the latest news on Mars mission using BeautifulSoup, splinter, pandas in a jupyter notebook.
 
+![NASA_mars_news.pgm](Images/NASA_mars_news.png)
+
 ### JPL Mars Space Images - Featured Image
 
 https://www.spaceimages-mars.com was used to scrape the featured image of mars in full resolution.
 Use splinter to navigate the site and find the image url for current Feature Mars Image and assign the url string to a variable.
 
+![PJL_mars_space.pgm](Images/JPL_mars_space.png)
+
 ### Mars Facts
 
 https://space-facts.com/mars/ was used to obtain the table containing facts about the planet, including Diameter, Mass, etc.
 
+![Mars_facts.pgm](Images/Mars_facts.png)
+
 ### Mars Hemispheres
 
 https://marshemispheres.com/ was used to obtain high-resolution images for each of Mar's hemispheres.
+
+![Mars_hem.pgm](Images/Mars_hem.png)
 
 ## Flask
 
