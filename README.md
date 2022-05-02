@@ -2,11 +2,13 @@
 
 ![mission_to_mars](Images/mission_to_mars.png)
 
-This assignment aims to build a web application that scrapes four different websites for the Mission to Mars data and displays the information on a single HTML page.
+This assignment aimed to learn web scraping to extract information from the NASA Science Mars Exploration website. Using the Chrome Developer tool to identify HTML components, Beautiful Soup/Splinter to automate a web browser and perform the scrape, MongoDB for storing data, and Flask for creating the web application for displaying the data. This scrape lesson collected the following planet information:
 
-The following steps is used in order to complete this objective:
+The following steps is used in order to complete this task:
 
 ## Scraping
+
+The initial scraping uses Jupyter Notebook, Beautiful Soup, Panda, and Requests/Splinter.
 
 ### NASA Mars News
 
@@ -15,6 +17,7 @@ url=https://redplanetscience.com/ website was used to get the latest news on Mar
 ### JPL Mars Space Images - Featured Image
 
 https://www.spaceimages-mars.com was used to scrape the featured image of mars in full resolution.
+Use splinter to navigate the site and find the image url for current Feature Mars Image and assign the url string to a variable.
 
 ### Mars Facts
 
